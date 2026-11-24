@@ -20,7 +20,7 @@ one clean line of 125 characters (criterion 5).
 
 import os
 
-LINE = (
+ENTRY_LINE = (
     "Weekly status: I saved you 6 hours, spent 5 of them waiting for "
     "your reply, and logged the remaining hour as emotional labor."
 )
@@ -28,12 +28,17 @@ LINE = (
 MAX_CHARS = 200
 
 
-def main() -> None:
-    text = LINE
+def validate_entry(text: str) -> str:
+    """Check the entry is a single non-empty line within the limit."""
     assert 1 <= len(text) <= MAX_CHARS, "line must be 1-200 characters"
     assert text == text.strip(), "no leading/trailing whitespace"
     assert "\n" not in text and "\r" not in text, "must be a single line"
     assert text.strip(), "must not be only whitespace"
+    return text
+
+
+def main() -> None:
+    text = validate_entry(ENTRY_LINE)
     os.makedirs("/output", exist_ok=True)
     with open("/output/entry.txt", "w", encoding="utf-8", newline="") as f:
         f.write(text)
